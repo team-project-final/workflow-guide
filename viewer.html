@@ -20,116 +20,113 @@
     --accent-line:#d94b3b66;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--ink);
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
                  system-ui, "Apple SD Gothic Neo", sans-serif;
-    -webkit-font-smoothing: antialiased; }
-  a { color: var(--accent); }
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    height: 100vh;
+  }
+  a { color: inherit; text-decoration: none; }
 
   .vbar {
     position: sticky; top: 0; z-index: 50;
-    background: color-mix(in oklab, var(--bg) 92%, transparent);
+    background: color-mix(in oklab, var(--bg) 94%, transparent);
     backdrop-filter: blur(12px) saturate(140%);
     -webkit-backdrop-filter: blur(12px) saturate(140%);
     border-bottom: 1px solid var(--rule);
   }
   .vbar-inner {
-    max-width: 980px; margin: 0 auto;
+    max-width: 1640px; margin: 0 auto;
     display: grid; grid-template-columns: auto 1fr auto; gap: 16px;
     align-items: center; padding: 12px 24px;
   }
-  .vbar .back {
+  .vbar .back, .vbar .actions a {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 7px 12px;
     border: 1px solid var(--rule);
     border-radius: 8px;
     font-size: 12px; font-weight: 500; color: var(--ink-2);
-    background: var(--panel); text-decoration: none;
+    background: var(--panel);
     transition: border-color .15s, color .15s;
+    cursor: pointer;
   }
-  .vbar .back:hover { border-color: var(--accent-line); color: var(--accent); }
-  .vbar .crumb { font-size: 12px; color: var(--mute); display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .vbar .crumb .b { color: var(--ink-2); font-weight: 500; }
+  .vbar .back:hover, .vbar .actions a:hover {
+    border-color: var(--accent-line); color: var(--accent);
+  }
+  .vbar .crumb {
+    font-size: 12px; color: var(--mute);
+    display: flex; align-items: center; gap: 8px;
+    min-width: 0;
+  }
+  .vbar .crumb .b {
+    color: var(--ink-2); font-weight: 500;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
   .vbar .crumb .pill {
     display: inline-flex; align-items: center; gap: 4px;
     padding: 2px 8px; border-radius: 999px;
     background: var(--accent-soft); color: var(--accent);
     font-size: 11px; font-weight: 600;
     font-family: ui-monospace, monospace;
+    flex: none;
   }
   .vbar .actions { display: flex; gap: 8px; }
-  .vbar .actions a {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 12px;
-    border: 1px solid var(--rule);
-    border-radius: 8px;
-    font-size: 12px; font-weight: 500;
-    color: var(--ink-2); background: var(--panel);
-    text-decoration: none;
-    transition: border-color .15s, color .15s;
-  }
-  .vbar .actions a:hover { border-color: var(--accent-line); color: var(--accent); }
 
-  #stage {
-    max-width: 980px; margin: 0 auto;
-    padding: 32px 24px 80px;
+  /* iframe stage fills the rest of the viewport */
+  .stage {
+    width: 100%;
+    height: calc(100vh - 58px);
+    border: none;
+    background: #ffffff;
+    display: block;
   }
 
-  /* Loading + error states */
-  .state {
-    min-height: 50vh; display: grid; place-items: center;
-    color: var(--mute);
+  /* loading overlay */
+  .loader {
+    position: fixed; top: 58px; left: 0; right: 0; bottom: 0;
+    display: grid; place-items: center;
+    background: var(--bg);
+    transition: opacity .25s;
+    z-index: 10;
   }
-  .spin {
-    width: 22px; height: 22px; border-radius: 50%;
+  .loader.hide { opacity: 0; pointer-events: none; }
+  .loader .spin {
+    width: 24px; height: 24px; border-radius: 50%;
     border: 2px solid var(--rule); border-top-color: var(--accent);
     animation: sp 0.8s linear infinite;
-    margin-bottom: 12px;
+  }
+  .loader .msg {
+    margin-top: 12px; color: var(--mute); font-size: 13px;
   }
   @keyframes sp { to { transform: rotate(360deg); } }
-  .state .e {
-    background: var(--panel); border: 1px solid var(--rule); border-radius: 12px;
-    padding: 28px 32px; max-width: 520px; text-align: center;
-  }
-  .state .e h3 { margin: 0 0 8px; color: var(--ink); font-size: 16px; }
-  .state .e p { margin: 0 0 14px; line-height: 1.55; }
 
-  /* Strip aggressive sidebar / nav / footer overrides on injected content */
-  #stage > aside,
-  #stage [class*="sidebar" i],
-  #stage [class*="side-bar" i],
-  #stage [id*="sidebar" i],
-  #stage [class*="left-nav" i],
-  #stage [class*="navigation" i][class*="left" i],
-  #stage [class*="docs-nav" i],
-  #stage nav[class*="side" i],
-  #stage nav[id*="side" i] {
-    display: none !important;
+  /* error state */
+  .err {
+    position: fixed; inset: 58px 0 0 0;
+    display: grid; place-items: center;
+    background: var(--bg); padding: 24px;
+    z-index: 20;
   }
-  /* Force any layout grid/flex in injected content to single column */
-  #stage > div[class*="layout" i],
-  #stage > div[class*="container" i],
-  #stage > div[class*="wrapper" i] {
-    grid-template-columns: 1fr !important;
-    display: block !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    max-width: 100% !important;
+  .err .card {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 28px 32px; max-width: 520px;
+    text-align: center;
   }
-  /* Generic content typography polish */
-  #stage h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 6px; }
-  #stage h2 { font-size: 20px; letter-spacing: -0.01em; margin: 32px 0 12px; padding-top: 16px; border-top: 1px solid var(--rule); }
-  #stage h3 { font-size: 16px; margin: 24px 0 10px; }
-  #stage p, #stage li { line-height: 1.7; color: var(--ink-2); }
-  #stage code { font-family: ui-monospace, monospace; font-size: 0.9em; background: var(--rule); padding: 1px 5px; border-radius: 4px; }
-  #stage pre { background: #14161a; color: #ecedee; padding: 14px 16px; border-radius: 10px; overflow: auto; font-size: 13px; line-height: 1.55; }
-  #stage pre code { background: none; padding: 0; color: inherit; }
-  #stage table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 13px; }
-  #stage th, #stage td { border: 1px solid var(--rule); padding: 8px 10px; text-align: left; }
-  #stage th { background: var(--panel); }
-  #stage img { max-width: 100%; height: auto; border-radius: 8px; }
-  #stage blockquote { border-left: 3px solid var(--accent); margin: 12px 0; padding: 4px 14px; color: var(--ink-2); background: var(--accent-soft); border-radius: 0 8px 8px 0; }
-  #stage hr { border: none; border-top: 1px solid var(--rule); margin: 24px 0; }
+  .err h3 { margin: 0 0 8px; color: var(--ink); font-size: 16px; }
+  .err p { margin: 0 0 14px; color: var(--mute); line-height: 1.55; }
+  .err a.btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--accent-line); color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+  }
 </style>
 </head>
 <body>
@@ -144,7 +141,7 @@
     </a>
     <div class="crumb" id="crumb"></div>
     <div class="actions">
-      <a id="open-src" href="#" target="_blank" rel="noopener" title="GitHub Pages 원본">
+      <a id="open-src" href="#" target="_blank" rel="noopener" title="원본 페이지를 새 탭으로 열기">
         <span>원본</span>
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
           <path d="M3 3h4v4M7 3 3 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -154,149 +151,157 @@
   </div>
 </div>
 
-<div id="stage">
-  <div class="state">
-    <div style="text-align:center">
-      <div class="spin"></div>
-      <div>가이드 불러오는 중…</div>
-    </div>
+<div class="loader" id="loader">
+  <div style="text-align:center">
+    <div class="spin"></div>
+    <div class="msg">가이드 불러오는 중…</div>
   </div>
 </div>
 
+<iframe id="stage" class="stage" title="가이드 본문"></iframe>
+
 <script>
+  // ============================================================
+  // Viewer: load the guide in an iframe, then inject CSS into the
+  // iframe's document to hide the original site sidebar/header/footer.
+  // Same-origin (gh-pages) → cross-frame DOM access works.
+  // ============================================================
   const params = new URLSearchParams(location.search);
   const url = params.get('u');
-  const stage = document.getElementById('stage');
-  const crumb = document.getElementById('crumb');
+  const stage  = document.getElementById('stage');
+  const loader = document.getElementById('loader');
+  const crumb  = document.getElementById('crumb');
   const openSrc = document.getElementById('open-src');
 
   function setCrumb(title) {
-    // Parse W#/Step#/owner from URL pattern
-    let week = '', step = '', slug = '';
+    let week = '', step = '';
     try {
-      const m = url.match(/\/w(\d+)\/step(\d+)\/([^\/]+)\.html$/);
-      if (m) { week = 'W' + m[1]; step = 'Step ' + m[2]; slug = m[3]; }
-    } catch(e) {}
+      const m = url.match(/\/w(\d+)\/step(\d+)\//);
+      if (m) { week = 'W' + m[1]; step = 'Step ' + m[2]; }
+    } catch (e) {}
     crumb.innerHTML = '';
     if (week) {
-      const p = document.createElement('span'); p.className = 'pill';
+      const p = document.createElement('span');
+      p.className = 'pill';
       p.textContent = week + ' · ' + step;
       crumb.appendChild(p);
     }
-    const t = document.createElement('span'); t.className = 'b';
-    t.textContent = title || slug || '가이드';
-    t.style.overflow = 'hidden';
-    t.style.textOverflow = 'ellipsis';
-    t.style.whiteSpace = 'nowrap';
+    const t = document.createElement('span');
+    t.className = 'b';
+    t.textContent = title || '가이드';
     crumb.appendChild(t);
-    document.title = (title || slug || '가이드') + ' · Synapse 가이드 매니저';
+    document.title = (title || '가이드') + ' · Synapse 가이드 매니저';
   }
 
-  function showError(msg, useIframe) {
-    if (useIframe) {
-      stage.innerHTML = '';
-      const note = document.createElement('div');
-      note.style.cssText = 'background:var(--accent-soft);color:var(--accent);padding:10px 14px;border-radius:8px;margin-bottom:12px;font-size:12px;';
-      note.textContent = '내부 뷰어가 로드하지 못해 원문을 그대로 표시합니다. (좌측 사이드바 포함)';
-      const f = document.createElement('iframe');
-      f.src = url; f.style.cssText = 'width:100%;height:80vh;border:1px solid var(--rule);border-radius:12px;background:#fff;';
-      stage.appendChild(note); stage.appendChild(f);
-    } else {
-      stage.innerHTML = '<div class="state"><div class="e"><h3>가이드를 불러올 수 없습니다</h3><p>' + msg + '</p><p><a href="' + url + '" target="_blank" rel="noopener">원본 보기 →</a></p></div></div>';
+  function showError(msg) {
+    const e = document.createElement('div');
+    e.className = 'err';
+    e.innerHTML =
+      '<div class="card">' +
+        '<h3>가이드를 불러올 수 없습니다</h3>' +
+        '<p>' + msg + '</p>' +
+        '<a class="btn" href="' + (url || '#') + '" target="_blank" rel="noopener">' +
+          '원본 페이지로 이동 →' +
+        '</a>' +
+      '</div>';
+    document.body.appendChild(e);
+    loader.classList.add('hide');
+  }
+
+  // CSS injected into the guide iframe to hide the original site chrome
+  // and let the inner <main.guide-body> take the full width.
+  const INJECT_CSS = [
+    /* Hide original site chrome */
+    '.site-header,',
+    '.site-sidebar,',
+    '[data-sidebar],',
+    '.site-footer,',
+    '.site-nav-tabs,',
+    '.site-nav-list,',
+    '.site-search,',
+    '.site-brand,',
+    '.site-breadcrumb {',
+    '  display: none !important;',
+    '}',
+    /* Reset body grid/flex layout used to position the sidebar */
+    'body {',
+    '  display: block !important;',
+    '  grid-template-columns: none !important;',
+    '  margin: 0 !important;',
+    '  padding: 0 !important;',
+    '}',
+    /* Ensure the guide body fills the iframe */
+    '.guide-body, main.guide-body {',
+    '  margin: 0 !important;',
+    '  width: 100% !important;',
+    '  max-width: 100% !important;',
+    '  display: block !important;',
+    '}',
+    /* Remove any leftover left margins from the sidebar layout */
+    'main, .content, .container {',
+    '  margin-left: 0 !important;',
+    '  padding-left: max(24px, env(safe-area-inset-left)) !important;',
+    '  padding-right: max(24px, env(safe-area-inset-right)) !important;',
+    '}',
+    /* Smooth top spacing now that the original header is gone */
+    '.guide-body > header:first-child,',
+    '.guide-body header.guide-header,',
+    'main.guide-body > header:first-child {',
+    '  padding-top: 28px !important;',
+    '}',
+  ].join('\n');
+
+  function injectStyle() {
+    try {
+      const doc = stage.contentDocument || stage.contentWindow.document;
+      if (!doc) throw new Error('iframe document unavailable');
+
+      // Insert <style> into <head>
+      const head = doc.head || doc.documentElement;
+      const style = doc.createElement('style');
+      style.id = '__viewer_strip__';
+      style.textContent = INJECT_CSS;
+      head.appendChild(style);
+
+      // Pull page title for breadcrumb
+      const title = (doc.querySelector('title') || {}).textContent || '';
+      setCrumb(title.replace(/^WORKFLOW Guide\s*-\s*/, '').replace(/\s+\|\s+.*$/, '').trim());
+
+      // Open external links in new tab so we don't trap user in the iframe
+      doc.querySelectorAll('a[href]').forEach(a => {
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#')) return;
+        a.target = '_top';
+      });
+
+      loader.classList.add('hide');
+    } catch (err) {
+      // Cross-origin or other access failure
+      console.warn('viewer inject failed:', err);
+      showError('가이드 페이지에 접근할 수 없습니다. (cross-origin 또는 권한 문제)');
     }
   }
 
-  function rewriteUrls(doc, base) {
-    const baseUrl = new URL(base);
-    const fix = (el, attr) => {
-      const v = el.getAttribute(attr);
-      if (!v) return;
-      if (v.startsWith('#') || v.startsWith('data:') || v.startsWith('javascript:') || v.startsWith('mailto:')) return;
-      try { el.setAttribute(attr, new URL(v, baseUrl).href); } catch(e) {}
-    };
-    doc.querySelectorAll('a[href]').forEach(a => {
-      fix(a, 'href');
-      a.target = '_blank'; a.rel = 'noopener';
-    });
-    doc.querySelectorAll('img[src],source[src],iframe[src],script[src]').forEach(el => fix(el, 'src'));
-    doc.querySelectorAll('link[href]').forEach(el => fix(el, 'href'));
-  }
-
-  function stripChrome(doc) {
-    // Remove obvious sidebar / left-nav / top-nav containers
-    const killSelectors = [
-      'aside',
-      '[class*="sidebar" i]', '[id*="sidebar" i]',
-      '[class*="side-bar" i]',
-      '[class*="left-nav" i]', '[class*="leftnav" i]',
-      '[class*="docs-nav" i]',
-      '[class*="navigation-sidebar" i]',
-      'nav[class*="side" i]', 'nav[id*="side" i]',
-      '[class*="toc" i][class*="side" i]',
-    ];
-    killSelectors.forEach(sel => {
-      try { doc.querySelectorAll(sel).forEach(el => el.remove()); } catch(e) {}
-    });
-  }
-
-  function extractMain(doc) {
-    // Prefer <main>, article, .content, #content, .main, .docs-content
-    const candidates = [
-      'main',
-      'article',
-      '.content', '#content',
-      '.main-content', '#main-content',
-      '.docs-content', '.doc-content',
-      '.markdown-body',
-      '.container .content',
-    ];
-    for (const sel of candidates) {
-      const el = doc.querySelector(sel);
-      if (el && el.textContent.trim().length > 100) return el;
-    }
-    // Fallback: body minus stripped chrome
-    return doc.body;
-  }
-
-  async function load() {
+  function init() {
     if (!url) { showError('가이드 주소가 없습니다.'); return; }
     openSrc.href = url;
-    try {
-      const res = await fetch(url, { mode: 'cors' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const html = await res.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
+    setCrumb(''); // initial empty crumb
 
-      stripChrome(doc);
-      rewriteUrls(doc, url);
+    stage.addEventListener('load', injectStyle);
+    stage.addEventListener('error', () => showError('iframe 로드 실패'));
 
-      const title = (doc.querySelector('title') || {}).textContent || '';
-      setCrumb(title.replace(/ \| .*/, '').trim());
-
-      const main = extractMain(doc);
-      stage.innerHTML = '';
-      // Move children to keep events sane and avoid script execution
-      [...main.children].forEach(c => {
-        // Strip <script> nodes for safety
-        if (c.tagName === 'SCRIPT') return;
-        c.querySelectorAll && c.querySelectorAll('script').forEach(s => s.remove());
-        stage.appendChild(c);
-      });
-      if (!stage.children.length) {
-        // Last resort: take inner HTML
-        stage.innerHTML = main.innerHTML;
-        stage.querySelectorAll('script').forEach(s => s.remove());
+    // Safety timeout — if iframe never fires load
+    setTimeout(() => {
+      if (!loader.classList.contains('hide')) {
+        // Try to inject anyway (some browsers don't fire load reliably for cached responses)
+        try { injectStyle(); } catch (e) {}
       }
-    } catch (e) {
-      // CORS failure → graceful fallback to iframe
-      console.warn('viewer fallback:', e);
-      setCrumb('');
-      showError('네트워크 또는 권한 문제로 내부 뷰어가 콘텐츠를 가져오지 못했습니다.', true);
-    }
+    }, 4000);
+
+    stage.src = url;
   }
 
-  load();
+  init();
 </script>
 </body>
 </html>
