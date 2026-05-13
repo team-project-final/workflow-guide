@@ -122,7 +122,7 @@ function App() {
   const clearAll = () => {
     setQ(''); setSelOwners(new Set()); setSelWeeks(new Set()); setSelSteps(new Set()); setSelTags(new Set());
   };
-  const hasFilters = q || selOwners.size || selWeeks.size || selSteps.size || selTags.size;
+  const hasFilters = !!(q || selOwners.size || selWeeks.size || selSteps.size || selTags.size);
 
   // matrix click → toggle owner+week
   const handleMatrixClick = (ownerId, week) => {
@@ -331,7 +331,7 @@ function App() {
                 {sorted.slice(0, 300).map((g, i) => {
                   const o = window.OWNER_BY_ID[g.owner];
                   return (
-                    <a key={i} className="grid-card" href={`viewer.html?u=${encodeURIComponent(g.url)}`} target="_blank" rel="noopener"
+                    <a key={i} className="grid-card" href={`viewer.html?u=${encodeURIComponent(g.url)}`}
                        style={{ '--owner-color': o.color }}>
                       <div className="grid-card-top">
                         <div className="id-tag">
@@ -376,7 +376,7 @@ function App() {
                   {sorted.slice(0, 200).map((g, i) => {
                     const o = window.OWNER_BY_ID[g.owner];
                     return (
-                      <a key={i} className="list-row" href={`viewer.html?u=${encodeURIComponent(g.url)}`} target="_blank" rel="noopener">
+                      <a key={i} className="list-row" href={`viewer.html?u=${encodeURIComponent(g.url)}`}>
                         <div className="id-tag">
                           <span className="w">W{g.week}</span>
                           <span>·</span>
