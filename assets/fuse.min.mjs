@@ -2147,4 +2147,4 @@ Fuse.use = function (...plugins) {
 
 // Re-export public types
 
-module.exports = Fuse;
+export default Fuse;
