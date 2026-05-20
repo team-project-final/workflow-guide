@@ -1,0 +1,272 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Synapse Workflow Guide" [ref=e3] [cursor=pointer]:
+      - /url: /workflow-guide/
+    - generic [ref=e4]: W1 · Step 1 · Team Lead
+    - searchbox "가이드 검색" [ref=e5]
+  - complementary [ref=e6]:
+    - tablist [ref=e7]:
+      - tab "주차별" [selected] [ref=e8] [cursor=pointer]
+      - tab "멤버별" [ref=e9] [cursor=pointer]
+    - list
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - heading "WORKFLOW Guide - AWS 인프라 프로비저닝" [level=1] [ref=e12]
+      - generic [ref=e13]: "대상: 처음 Synapse 인프라 작업을 맡은 개발자 · 기준 문서: documents.wiki/18_기술_스택_정의서.md, PRD_W1, TASK_team-lead, WORKFLOW_team-lead_W1"
+      - generic "작업 요약" [ref=e14]:
+        - generic [ref=e15]:
+          - strong [ref=e16]: 2일
+          - text: Duration 기준
+        - generic [ref=e17]:
+          - strong [ref=e18]: P0
+          - text: PRD_W1 FR-TL-002
+        - generic [ref=e19]:
+          - strong [ref=e20]: 5 x 3
+          - text: ApplicationSet 서비스 x 환경
+        - generic [ref=e21]:
+          - strong [ref=e22]: 0/34
+          - text: 초기 체크리스트 상태
+    - main [ref=e23]:
+      - generic [ref=e24]:
+        - heading "1. 먼저 이해할 것" [level=2] [ref=e25]
+        - paragraph [ref=e26]: 이 작업은 dev 환경에 필요한 AWS 관리형 인프라와 ArgoCD 배포 기반을 만드는 작업이다. 목표는 운영급 최종 인프라가 아니라, 팀원이 4개 백엔드 서비스와 learning-ai 컨테이너를 EKS 위에 올려 통합 개발을 시작할 수 있는 최소 배포 기반을 확보하는 것이다.
+        - generic [ref=e27]:
+          - strong [ref=e28]: 완료 기준
+          - paragraph [ref=e29]: kubectl get nodes에서 EKS 노드가 Ready이고, RDS PostgreSQL 16, MSK Kafka, ElastiCache Redis 7, OpenSearch 8.x, ArgoCD 대시보드에 내부 네트워크 기준으로 접속 가능해야 한다.
+        - generic [ref=e30]:
+          - strong [ref=e31]: 범위 제한
+          - paragraph [ref=e32]: TASK 기준 Scope는 dev 환경 전용 최소 사양이며 월 $200 이내 비용 제한이 있다. Production Multi-AZ 고가용성, 모니터링 대시보드, 본격 비용 최적화는 이 Step의 범위가 아니다.
+      - generic [ref=e33]:
+        - heading "2. 문서에서 확인할 근거" [level=2] [ref=e34]
+        - table [ref=e36]:
+          - rowgroup [ref=e37]:
+            - row "문서 확인할 내용 작업에 반영할 결정" [ref=e38]:
+              - columnheader "문서" [ref=e39]
+              - columnheader "확인할 내용" [ref=e40]
+              - columnheader "작업에 반영할 결정" [ref=e41]
+          - rowgroup [ref=e42]:
+            - row "18_기술_스택_정의서 EKS, RDS, ElastiCache, MSK, OpenSearch, ECR, ArgoCD ApplicationSet, Schema Registry AWS 관리형 서비스와 GitOps 배포 구조를 기본값으로 사용" [ref=e43]:
+              - cell "18_기술_스택_정의서" [ref=e44]
+              - cell "EKS, RDS, ElastiCache, MSK, OpenSearch, ECR, ArgoCD ApplicationSet, Schema Registry" [ref=e45]
+              - cell "AWS 관리형 서비스와 GitOps 배포 구조를 기본값으로 사용" [ref=e46]
+            - 'row "PRD_W1 FR-TL-002: EKS 클러스터 가동 + RDS/Redis/MSK/OpenSearch 접속 가능 접속 테스트 결과를 수용 기준으로 관리" [ref=e47]':
+              - cell "PRD_W1" [ref=e48]
+              - 'cell "FR-TL-002: EKS 클러스터 가동 + RDS/Redis/MSK/OpenSearch 접속 가능" [ref=e49]'
+              - cell "접속 테스트 결과를 수용 기준으로 관리" [ref=e50]
+            - row "TASK_team-lead EKS 3 node, RDS db.t3.medium, MSK 3 broker, Redis cache.t3.micro, OpenSearch 1 node dev 초기 리소스 크기를 최소 사양으로 고정" [ref=e51]:
+              - cell "TASK_team-lead" [ref=e52]
+              - cell "EKS 3 node, RDS db.t3.medium, MSK 3 broker, Redis cache.t3.micro, OpenSearch 1 node dev" [ref=e53]
+              - cell "초기 리소스 크기를 최소 사양으로 고정" [ref=e54]
+            - row "WORKFLOW_team-lead_W1 1.1 ~ 1.8 체크리스트, 1.6/1.9/1.10 N/A 요구사항 분석, 보안 1/2차 검토, 구현, 접속 테스트 순서로 진행" [ref=e55]:
+              - cell "WORKFLOW_team-lead_W1" [ref=e56]
+              - cell "1.1 ~ 1.8 체크리스트, 1.6/1.9/1.10 N/A" [ref=e57]
+              - cell "요구사항 분석, 보안 1/2차 검토, 구현, 접속 테스트 순서로 진행" [ref=e58]
+            - row "09_Git_규칙_정의서 / 보충 문서 synapse-gitops, ECR, ArgoCD ApplicationSet, Schema Registry 운영 흐름 매니페스트는 GitOps 레포에 두고 ArgoCD가 동기화하게 구성" [ref=e59]:
+              - cell "09_Git_규칙_정의서 / 보충 문서" [ref=e60]
+              - cell "synapse-gitops, ECR, ArgoCD ApplicationSet, Schema Registry 운영 흐름" [ref=e61]
+              - cell "매니페스트는 GitOps 레포에 두고 ArgoCD가 동기화하게 구성" [ref=e62]
+      - generic [ref=e63]:
+        - heading "3. 목표 아키텍처" [level=2] [ref=e64]
+        - generic [ref=e65]: Developer / GitHub Actions | | docker build + ECR push + gitops image tag update v AWS ECR ----> synapse-gitops repo ----> ArgoCD ApplicationSet | v EKS dev cluster ├── platform-svc ├── engagement-svc ├── knowledge-svc ├── learning-card └── learning-ai Private subnets / VPC internal access ├── RDS PostgreSQL 16 ├── MSK Kafka 3.x ├── Schema Registry ├── ElastiCache Redis 7 └── OpenSearch 8.x
+        - generic [ref=e66]:
+          - strong [ref=e67]: ApplicationSet 기준
+          - paragraph [ref=e68]: 18번 기술 스택은 platform-svc, engagement-svc, knowledge-svc, learning-card, learning-ai 5개 배포 대상과 dev, staging, prod 3개 환경을 matrix generator로 관리한다고 정의한다.
+      - generic [ref=e69]:
+        - heading "4. 리소스 스펙 초안" [level=2] [ref=e70]
+        - table [ref=e72]:
+          - rowgroup [ref=e73]:
+            - row "구성 요소 dev 기준 스펙 설계 포인트 접속 확인" [ref=e74]:
+              - columnheader "구성 요소" [ref=e75]
+              - columnheader "dev 기준 스펙" [ref=e76]
+              - columnheader "설계 포인트" [ref=e77]
+              - columnheader "접속 확인" [ref=e78]
+          - rowgroup [ref=e79]:
+            - row "EKS Managed node group 3 nodes 서비스 5개와 ArgoCD를 올릴 최소 용량. 노드는 private subnet 우선. kubectl get nodes" [ref=e80]:
+              - cell "EKS" [ref=e81]
+              - cell "Managed node group 3 nodes" [ref=e82]
+              - cell "서비스 5개와 ArgoCD를 올릴 최소 용량. 노드는 private subnet 우선." [ref=e83]
+              - cell "kubectl get nodes" [ref=e84]
+            - row "RDS PostgreSQL PostgreSQL 16, db.t3.medium 스토리지 암호화, private subnet, EKS 보안 그룹에서만 접근 허용. psql 또는 앱 health check" [ref=e85]:
+              - cell "RDS PostgreSQL" [ref=e86]
+              - cell "PostgreSQL 16, db.t3.medium" [ref=e87]
+              - cell "스토리지 암호화, private subnet, EKS 보안 그룹에서만 접근 허용." [ref=e88]
+              - cell "psql 또는 앱 health check" [ref=e89]
+            - row "MSK Kafka Kafka 3.x, 3 broker TLS 통신, private broker, Schema Registry 연동 경로 확보. kafka-broker-api-versions.sh" [ref=e90]:
+              - cell "MSK Kafka" [ref=e91]
+              - cell "Kafka 3.x, 3 broker" [ref=e92]
+              - cell "TLS 통신, private broker, Schema Registry 연동 경로 확보." [ref=e93]
+              - cell "kafka-broker-api-versions.sh" [ref=e94]
+            - row "Schema Registry Confluent 7.x 호환 MSK와 같은 VPC 내부에서 접근. W2에서 BACKWARD 정책 강제 예정. GET /subjects" [ref=e95]:
+              - cell "Schema Registry" [ref=e96]
+              - cell "Confluent 7.x 호환" [ref=e97]
+              - cell "MSK와 같은 VPC 내부에서 접근. W2에서 BACKWARD 정책 강제 예정." [ref=e98]
+              - cell "GET /subjects" [ref=e99]
+            - row "ElastiCache Redis Redis 7, cache.t3.micro AUTH 토큰, in-transit encryption, 앱 서브넷 접근 제한. redis-cli --tls ping" [ref=e100]:
+              - cell "ElastiCache Redis" [ref=e101]
+              - cell "Redis 7, cache.t3.micro" [ref=e102]
+              - cell "AUTH 토큰, in-transit encryption, 앱 서브넷 접근 제한." [ref=e103]
+              - cell "redis-cli --tls ping" [ref=e104]
+            - row "OpenSearch OpenSearch 8.x, 1 node dev dev 검색 검증용. nori 분석기 사용 가능 여부를 생성 전 확인. GET /_cluster/health" [ref=e105]:
+              - cell "OpenSearch" [ref=e106]
+              - cell "OpenSearch 8.x, 1 node dev" [ref=e107]
+              - cell "dev 검색 검증용. nori 분석기 사용 가능 여부를 생성 전 확인." [ref=e108]
+              - cell "GET /_cluster/health" [ref=e109]
+            - row "ArgoCD EKS 내부 설치 + ApplicationSet dev autoSync, staging/prod manual sync 전제. 대시보드 로그인, app sync 상태" [ref=e110]:
+              - cell "ArgoCD" [ref=e111]
+              - cell "EKS 내부 설치 + ApplicationSet" [ref=e112]
+              - cell "dev autoSync, staging/prod manual sync 전제." [ref=e113]
+              - cell "대시보드 로그인, app sync 상태" [ref=e114]
+      - generic [ref=e115]:
+        - heading "5. 네트워크와 보안 원칙" [level=2] [ref=e116]
+        - generic [ref=e117]:
+          - generic [ref=e118]:
+            - heading "VPC 설계" [level=3] [ref=e119]
+            - list [ref=e120]:
+              - listitem [ref=e121]: 서비스 워커 노드와 데이터 계층은 private subnet에 둔다.
+              - listitem [ref=e122]: 외부 접근은 Cloudflare/Gateway/Ingress 등 공개 진입점으로 제한한다.
+              - listitem [ref=e123]: RDS, MSK, Redis, OpenSearch는 VPC 내부 통신만 허용한다.
+              - listitem [ref=e124]: NAT Gateway 비용이 부담되면 dev 범위에서 엔드포인트와 비용을 별도 검토한다.
+          - generic [ref=e125]:
+            - heading "Security Group" [level=3] [ref=e126]
+            - list [ref=e127]:
+              - listitem [ref=e128]: EKS 노드 SG → RDS 5432 허용
+              - listitem [ref=e129]: EKS 노드 SG → Redis 6379 허용
+              - listitem [ref=e130]: EKS 노드 SG → MSK broker port 허용
+              - listitem [ref=e131]: EKS 노드 SG → OpenSearch HTTPS 허용
+              - listitem [ref=e132]: 관리자 접속은 VPN, bastion, SSM 중 하나로 제한
+        - generic [ref=e133]:
+          - strong [ref=e134]: 금지
+          - paragraph [ref=e135]: RDS, Redis, MSK, OpenSearch를 인터넷에 직접 공개하지 않는다. 임시 테스트를 위해 퍼블릭 접근을 열었다면 작업 완료 전 닫고 보안 검토 결과에 기록한다.
+      - generic [ref=e136]:
+        - heading "6. 진행 순서" [level=2] [ref=e137]
+        - generic [ref=e138]:
+          - article [ref=e139]:
+            - generic [ref=e140]:
+              - heading "Step 1. TASK 시작" [level=3] [ref=e141]
+              - generic [ref=e142]: "1.1"
+            - list [ref=e143]:
+              - listitem [ref=e144]: □Step Goal / Done When / Scope / Input을 TASK_team-lead에서 확인한다.
+              - listitem [ref=e145]: □PRD_W1의 FR-TL-002를 이 작업의 P0 수용 기준으로 표시한다.
+              - listitem [ref=e146]: □Duration 2일을 기준으로 구현 범위를 dev 최소 인프라로 제한한다.
+          - article [ref=e147]:
+            - generic [ref=e148]:
+              - heading "Step 2. 요구사항 분석" [level=3] [ref=e149]
+              - generic [ref=e150]: "1.2"
+            - list [ref=e151]:
+              - listitem [ref=e152]: □EKS/RDS/MSK/ElastiCache/OpenSearch 스펙을 표로 확정한다.
+              - listitem [ref=e153]: □ApplicationSet의 5서비스 x 3환경 matrix를 확정한다.
+              - listitem [ref=e154]: □VPC, private subnet, route table, security group 초안을 작성한다.
+              - listitem [ref=e155]: □Instructions 초안을 TASK 또는 인프라 README에 반영한다.
+          - article [ref=e156]:
+            - generic [ref=e157]:
+              - heading "Step 3. Security 1차 검토" [level=3] [ref=e158]
+              - generic [ref=e159]: "1.3"
+            - list [ref=e160]:
+              - listitem [ref=e161]: □VPC 내부 통신만 허용하는지 확인한다.
+              - listitem [ref=e162]: □보안 그룹 인바운드/아웃바운드 규칙을 리소스별로 적는다.
+              - listitem [ref=e163]: □IAM Role/Policy는 최소 권한 원칙으로 작성한다.
+              - listitem [ref=e164]: □검토 결과를 TASK Constraints에 반영한다.
+          - article [ref=e165]:
+            - generic [ref=e166]:
+              - heading "Step 4. 인프라 아키텍처 설계" [level=3] [ref=e167]
+              - generic [ref=e168]: "1.4"
+            - list [ref=e169]:
+              - listitem [ref=e170]: □EKS 3 node 구성을 설계한다.
+              - listitem [ref=e171]: □RDS PostgreSQL 16 db.t3.medium 구성을 설계한다.
+              - listitem [ref=e172]: □MSK Kafka 3.x 3 broker와 Schema Registry 배치를 설계한다.
+              - listitem [ref=e173]: □Redis 7 cache.t3.micro와 OpenSearch 1 node dev 구성을 설계한다.
+              - listitem [ref=e174]: □설계 후 실제 예상 소요를 보고 Duration final을 갱신한다.
+          - article [ref=e175]:
+            - generic [ref=e176]:
+              - heading "Step 5. Security 2차 검토" [level=3] [ref=e177]
+              - generic [ref=e178]: "1.5"
+            - list [ref=e179]:
+              - listitem [ref=e180]: □RDS at-rest 암호화와 SSL 접속 정책을 확인한다.
+              - listitem [ref=e181]: □MSK TLS 통신 설정을 확인한다.
+              - listitem [ref=e182]: □ElastiCache AUTH 토큰과 in-transit encryption을 확인한다.
+              - listitem [ref=e183]: □검토 결과를 TASK Constraints에 반영한다.
+          - article [ref=e184]:
+            - generic [ref=e185]:
+              - heading "Step 6. Terraform/eksctl 구현" [level=3] [ref=e186]
+              - generic [ref=e187]: "1.7"
+            - list [ref=e188]:
+              - listitem [ref=e189]: □선택한 도구를 하나로 고정한다. 재현성 기준으로는 Terraform을 우선 검토한다.
+              - listitem [ref=e190]: □EKS, RDS, MSK, Redis, OpenSearch를 순서대로 생성한다.
+              - listitem [ref=e191]: □ArgoCD를 설치하고 ApplicationSet 5서비스 x 3환경을 구성한다.
+              - listitem [ref=e192]: □생성된 엔드포인트와 시크릿은 문서에는 플레이스홀더로만 기록한다.
+          - article [ref=e193]:
+            - generic [ref=e194]:
+              - heading "Step 7. 접속 테스트" [level=3] [ref=e195]
+              - generic [ref=e196]: "1.8"
+            - list [ref=e197]:
+              - listitem [ref=e198]: □kubectl get nodes에서 Ready를 확인한다.
+              - listitem [ref=e199]: □RDS, MSK, Redis, OpenSearch 접속 테스트 로그를 남긴다.
+              - listitem [ref=e200]: □ArgoCD 대시보드 접근과 ApplicationSet 렌더링을 확인한다.
+              - listitem [ref=e201]: □팀원 접근 권한 부여와 권한 범위를 확인한다.
+      - generic [ref=e202]:
+        - heading "7. 구현 산출물 예시" [level=2] [ref=e203]
+        - generic [ref=e204]:
+          - generic [ref=e205]:
+            - heading "Terraform 디렉터리" [level=3] [ref=e206]
+            - code [ref=e208]: infra/aws/dev/ ├── main.tf ├── variables.tf ├── outputs.tf ├── vpc.tf ├── eks.tf ├── rds.tf ├── msk.tf ├── redis.tf ├── opensearch.tf └── argocd.tf
+          - generic [ref=e209]:
+            - heading "접속 정보 문서" [level=3] [ref=e210]
+            - code [ref=e212]: docs/infra/dev-access.md ├── cluster name ├── region ├── kubectl setup ├── internal endpoints placeholder ├── required IAM groups ├── smoke test commands └── troubleshooting
+        - generic [ref=e213]:
+          - strong [ref=e214]: 시크릿 관리
+          - paragraph [ref=e215]: 실제 DB 비밀번호, Redis AUTH 토큰, ArgoCD admin password, AWS access key를 문서나 Git에 남기지 않는다. 공유 문서에는 <RDS_ENDPOINT>, <REDIS_AUTH_TOKEN> 같은 플레이스홀더만 둔다.
+      - generic [ref=e216]:
+        - heading "8. ApplicationSet 골격" [level=2] [ref=e217]
+        - paragraph [ref=e218]: 실제 repo URL, namespace, path는 synapse-gitops 구조에 맞춘다. dev는 자동 동기화, staging/prod는 수동 승인을 전제로 둔다.
+        - code [ref=e220]: "apiVersion: argoproj.io/v1alpha1 kind: ApplicationSet metadata: name: synapse-services namespace: argocd spec: generators: - matrix: generators: - list: elements: - service: platform-svc - service: engagement-svc - service: knowledge-svc - service: learning-card - service: learning-ai - list: elements: - env: dev autoSync: \"true\" - env: staging autoSync: \"false\" - env: prod autoSync: \"false\" template: metadata: name: '{{service}}-{{env}}' spec: project: synapse source: repoURL: https://github.com/team-project-final/synapse-gitops.git targetRevision: main path: apps/{{service}}/overlays/{{env}} destination: server: https://kubernetes.default.svc namespace: synapse-{{env}} syncPolicy: automated: prune: true selfHeal: true"
+        - generic [ref=e221]:
+          - strong [ref=e222]: 주의
+          - paragraph [ref=e223]: "위 YAML은 구조 설명용이다. autoSync: false 환경에서 자동 sync 블록을 조건부로 제거하려면 실제 ApplicationSet 템플릿 기능과 팀의 ArgoCD 버전에 맞춰 별도 검증한다."
+      - generic [ref=e224]:
+        - heading "9. Smoke Test 명령" [level=2] [ref=e225]
+        - generic [ref=e226]:
+          - generic [ref=e227]:
+            - heading "Kubernetes" [level=3] [ref=e228]
+            - code [ref=e230]: aws eks update-kubeconfig --name synapse-dev --region ap-northeast-2 kubectl get nodes kubectl get pods -A kubectl get applications -n argocd
+          - generic [ref=e231]:
+            - heading "Data Services" [level=3] [ref=e232]
+            - code [ref=e234]: psql "host=<RDS_ENDPOINT> port=5432 dbname=<DB> user=<USER> sslmode=require" redis-cli -h <REDIS_ENDPOINT> -p 6379 --tls -a <TOKEN> ping curl -k https://<OPENSEARCH_ENDPOINT>/_cluster/health kafka-broker-api-versions.sh --bootstrap-server <MSK_BOOTSTRAP>
+      - generic [ref=e235]:
+        - heading "10. PR 또는 작업 보고서에 포함할 산출물" [level=2] [ref=e236]
+        - list [ref=e237]:
+          - listitem [ref=e238]: 인프라 구성도 또는 리소스 목록
+          - listitem [ref=e239]: VPC / subnet / route / security group 설계표
+          - listitem [ref=e240]: Terraform 또는 eksctl 설정 파일
+          - listitem [ref=e241]: ArgoCD ApplicationSet YAML
+          - listitem [ref=e242]: 접속 정보 문서 또는 .env.example 업데이트
+          - listitem [ref=e243]: RDS/MSK/Redis/OpenSearch/ArgoCD smoke test 로그
+          - listitem [ref=e244]: 팀원 접근 권한 부여 내역
+          - listitem [ref=e245]: 비용 제한과 남은 리스크
+      - generic [ref=e246]:
+        - heading "11. 최종 체크리스트" [level=2] [ref=e247]
+        - list [ref=e248]:
+          - listitem [ref=e249]: □TASK Step Goal / Done When / Scope / Input 확인
+          - listitem [ref=e250]: □PRD_W1 FR-TL-002 확인
+          - listitem [ref=e251]: □Duration 2일 기준 범위 확정
+          - listitem [ref=e252]: □EKS/RDS/MSK/Redis/OpenSearch 스펙 확정
+          - listitem [ref=e253]: □ApplicationSet 5서비스 x 3환경 요건 확인
+          - listitem [ref=e254]: □VPC/서브넷/보안그룹 설계 완료
+          - listitem [ref=e255]: □VPC 내부 통신만 허용
+          - listitem [ref=e256]: □IAM 최소 권한 적용
+          - listitem [ref=e257]: □RDS at-rest/in-transit 암호화 확인
+          - listitem [ref=e258]: □MSK TLS 통신 확인
+          - listitem [ref=e259]: □Redis AUTH 토큰 확인
+          - listitem [ref=e260]: □Terraform 또는 eksctl 구현 완료
+          - listitem [ref=e261]: □kubectl nodes Ready 확인
+          - listitem [ref=e262]: □RDS 접속 테스트 완료
+          - listitem [ref=e263]: □MSK 브로커 접속 테스트 완료
+          - listitem [ref=e264]: □Redis 접속 테스트 완료
+          - listitem [ref=e265]: □OpenSearch 접속 테스트 완료
+          - listitem [ref=e266]: □ArgoCD 대시보드 접근 테스트 완료
+          - listitem [ref=e267]: □팀원 접근 권한 부여 확인
+          - listitem [ref=e268]: □1.6 / 1.9 / 1.10은 인프라 작업으로 N/A 처리
+  - contentinfo [ref=e269]:
+    - paragraph [ref=e270]:
+      - text: © Synapse Workflow Guide ·
+      - link "source" [ref=e271] [cursor=pointer]:
+        - /url: https://github.com/team-project-final/documents
