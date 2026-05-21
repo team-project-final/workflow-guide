@@ -4,26 +4,31 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>가이드 뷰어</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-<link rel="stylesheet" as="style" crossorigin
-  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
 <style>
   :root {
-    --bg:         #f4f2ec;
-    --panel:      #fbfaf6;
-    --ink:        #14161a;
-    --ink-2:      #14161acc;
-    --mute:       #14161a80;
-    --rule:       #1a1a1a14;
-    --accent:     #d94b3b;
-    --accent-soft:#d94b3b18;
-    --accent-line:#d94b3b66;
+    --bg:         #f8f7f4;
+    --panel:      #ffffff;
+    --ink:        #1a1a1a;
+    --ink-2:      #1a1a1acc;
+    --mute:       #8a8a8a;
+    --rule:       #e8e6e1;
+    --accent:     #0ea5a5;
+    --accent-soft: rgba(14, 165, 165, 0.06);
+    --accent-line: rgba(14, 165, 165, 0.4);
   }
   * { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0;
-    background: var(--bg); color: var(--ink);
-    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    background: var(--bg)
+      repeating-radial-gradient(circle at 17% 32%, rgba(0,0,0,0.012) 0, transparent 1px)
+      , repeating-radial-gradient(circle at 62% 78%, rgba(0,0,0,0.01) 0, transparent 1px)
+      , repeating-radial-gradient(circle at 88% 12%, rgba(0,0,0,0.008) 0, transparent 1px);
+    color: var(--ink);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont,
                  system-ui, "Apple SD Gothic Neo", sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow: hidden;
@@ -41,7 +46,7 @@
   .vbar-inner {
     max-width: 1640px; margin: 0 auto;
     display: grid; grid-template-columns: auto 1fr auto; gap: 16px;
-    align-items: center; padding: 12px 24px;
+    align-items: center; padding: 8px 24px;
   }
   .vbar .back, .vbar .actions a {
     display: inline-flex; align-items: center; gap: 6px;
@@ -78,7 +83,7 @@
   /* iframe stage fills the rest of the viewport */
   .stage {
     width: 100%;
-    height: calc(100vh - 58px);
+    height: calc(100vh - 50px);
     border: none;
     background: #ffffff;
     display: block;
@@ -86,7 +91,7 @@
 
   /* loading overlay */
   .loader {
-    position: fixed; top: 58px; left: 0; right: 0; bottom: 0;
+    position: fixed; top: 50px; left: 0; right: 0; bottom: 0;
     display: grid; place-items: center;
     background: var(--bg);
     transition: opacity .25s;
@@ -105,7 +110,7 @@
 
   /* error state */
   .err {
-    position: fixed; inset: 58px 0 0 0;
+    position: fixed; inset: 50px 0 0 0;
     display: grid; place-items: center;
     background: var(--bg); padding: 24px;
     z-index: 20;
@@ -127,9 +132,61 @@
     border-radius: 8px;
     font-size: 13px; font-weight: 500;
   }
+
+  /* Reading progress bar */
+  .progress-bar {
+    position: fixed; top: 0; left: 0;
+    height: 3px; width: 0%;
+    background: var(--accent);
+    z-index: 100;
+    transition: width .15s ease-out;
+    pointer-events: none;
+  }
+
+  /* Floating nav buttons */
+  .fab-group {
+    position: fixed; bottom: 28px; right: 28px;
+    display: flex; flex-direction: column; gap: 10px;
+    z-index: 60;
+  }
+  .fab-group a, .fab-group button {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: none; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 1px var(--rule);
+    color: var(--ink-2);
+    font-size: 14px; font-weight: 600;
+    font-family: inherit;
+    transition: background .15s, color .15s, box-shadow .15s;
+    text-decoration: none;
+  }
+  .fab-group a:hover, .fab-group button:hover {
+    background: rgba(255,255,255,0.92);
+    color: var(--accent);
+    box-shadow: 0 2px 12px rgba(14,165,165,0.15), 0 0 0 1px var(--accent-line);
+  }
+  .fab-group .fab-label {
+    position: absolute; right: 50px;
+    background: rgba(0,0,0,0.72); color: #fff;
+    padding: 4px 10px; border-radius: 6px;
+    font-size: 11px; font-weight: 500;
+    white-space: nowrap;
+    opacity: 0; pointer-events: none;
+    transition: opacity .15s;
+  }
+  .fab-group a:hover .fab-label,
+  .fab-group button:hover .fab-label {
+    opacity: 1;
+  }
 </style>
 </head>
 <body>
+
+<div class="progress-bar" id="progress-bar"></div>
 
 <div class="vbar">
   <div class="vbar-inner">
@@ -159,6 +216,23 @@
 </div>
 
 <iframe id="stage" class="stage" title="가이드 본문"></iframe>
+
+<div class="fab-group">
+  <a href="index.html" title="목록으로 돌아가기">
+    <span class="fab-label">목록</span>
+    <span>←</span>
+  </a>
+  <button id="fab-top" type="button" title="맨 위로 스크롤">
+    <span class="fab-label">맨 위로</span>
+    <span>↑</span>
+  </button>
+  <a id="fab-src" href="#" target="_blank" rel="noopener" title="원본 페이지">
+    <span class="fab-label">원본</span>
+    <svg width="14" height="14" viewBox="0 0 10 10" fill="none">
+      <path d="M3 3h4v4M7 3 3 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</div>
 
 <script>
   // ============================================================
@@ -275,6 +349,7 @@
       });
 
       loader.classList.add('hide');
+      attachScrollListener();
     } catch (err) {
       // Cross-origin or other access failure
       console.warn('viewer inject failed:', err);
@@ -282,9 +357,52 @@
     }
   }
 
+  // Floating nav: keep fab-src in sync with openSrc
+  const fabSrc = document.getElementById('fab-src');
+  const fabTop = document.getElementById('fab-top');
+  const progressBar = document.getElementById('progress-bar');
+
+  // Scroll-to-top for iframe content
+  fabTop.addEventListener('click', () => {
+    try {
+      const doc = stage.contentDocument || stage.contentWindow.document;
+      if (doc) {
+        doc.documentElement.scrollTop = 0;
+        if (doc.scrollingElement) doc.scrollingElement.scrollTop = 0;
+      }
+    } catch (e) {
+      stage.contentWindow.scrollTo(0, 0);
+    }
+  });
+
+  // Reading progress bar based on iframe scroll
+  function trackProgress() {
+    try {
+      const doc = stage.contentDocument || stage.contentWindow.document;
+      if (!doc) return;
+      const el = doc.scrollingElement || doc.documentElement;
+      const scrollTop = el.scrollTop;
+      const scrollHeight = el.scrollHeight - el.clientHeight;
+      const pct = scrollHeight > 0 ? Math.min(100, (scrollTop / scrollHeight) * 100) : 0;
+      progressBar.style.width = pct + '%';
+    } catch (e) {}
+  }
+
+  function attachScrollListener() {
+    try {
+      const win = stage.contentWindow;
+      if (win) {
+        win.addEventListener('scroll', trackProgress, { passive: true });
+        // Also poll periodically as a fallback
+        setInterval(trackProgress, 1000);
+      }
+    } catch (e) {}
+  }
+
   function init() {
     if (!url) { showError('가이드 주소가 없습니다.'); return; }
     openSrc.href = url;
+    fabSrc.href = url;
     setCrumb(''); // initial empty crumb
 
     stage.addEventListener('load', injectStyle);

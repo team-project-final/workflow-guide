@@ -1,38 +1,241 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>404 · Synapse Workflow Guide</title>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
-    <link rel="stylesheet" href="/workflow-guide/assets/styles.css">
-    <link rel="prefetch" as="fetch" href="/workflow-guide/assets/search.51245d4.json" crossorigin><meta name="search-url" data-search-url="/workflow-guide/assets/search.51245d4.json">
-  </head>
-  <body class="page-404">
-    <header class="site-header">
-      <a class="site-brand" href="/workflow-guide/">Synapse Workflow Guide</a>
-      <div class="site-breadcrumb">404</div>
-      <input class="site-search" type="search" placeholder="검색…" aria-label="가이드 검색" data-search-input>
-    </header>
-    <aside class="site-sidebar" data-sidebar>
-      <nav class="site-nav-tabs" role="tablist">
-        <button data-tab="week" role="tab" aria-selected="true">주차별</button>
-        <button data-tab="member" role="tab" aria-selected="false">멤버별</button>
-      </nav>
-      <ol class="site-nav-list" data-nav-list></ol>
-    </aside>
-    <main class="site-content">
-    <section class="home-hero">
-      <h1>404 — 페이지를 찾을 수 없습니다</h1>
-      <p class="subtitle">URL이 변경되었거나 가이드가 이동/삭제되었을 수 있습니다.</p>
-      <p><a href="/workflow-guide/">홈으로 돌아가기</a></p>
-    </section></main>
-    <footer class="site-footer">
-      <p>&copy; Synapse Workflow Guide · <a href="https://github.com/team-project-final/documents">source</a></p>
-    </footer>
-    <script src="/workflow-guide/assets/app.js" type="module"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Synapse Workflow Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8f7f4;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(0, 0, 0, 0.03) 59px, rgba(0, 0, 0, 0.03) 60px),
+        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(0, 0, 0, 0.03) 59px, rgba(0, 0, 0, 0.03) 60px);
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 24px;
+      left: 32px;
+      font-size: 14px;
+      color: #8a8a8a;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .header:hover {
+      color: #1a1a1a;
+    }
+
+    /* Main content */
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      text-align: center;
+    }
+
+    /* 404 number */
+    .four-oh-four {
+      font-family: 'Inter', sans-serif;
+      font-size: 120px;
+      font-weight: 700;
+      color: #e8e6e1;
+      line-height: 1;
+      animation: float 4s ease-in-out infinite;
+      user-select: none;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-16px); }
+    }
+
+    /* Compass */
+    .compass-wrapper {
+      margin-top: 32px;
+      margin-bottom: 36px;
+      width: 100px;
+      height: 100px;
+      position: relative;
+      animation: compass-spin 20s linear infinite;
+    }
+
+    @keyframes compass-spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .compass-ring {
+      width: 100px;
+      height: 100px;
+      border: 2px solid #e8e6e1;
+      border-radius: 50%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .compass-ring::before {
+      content: '';
+      position: absolute;
+      width: 88px;
+      height: 88px;
+      border: 1px solid #e8e6e1;
+      border-radius: 50%;
+      top: 4px;
+      left: 4px;
+    }
+
+    /* Compass cardinal ticks */
+    .compass-tick {
+      position: absolute;
+      width: 2px;
+      height: 8px;
+      background: #c8c6c1;
+      left: 50%;
+      top: 2px;
+      transform-origin: 50% 48px;
+      margin-left: -1px;
+    }
+
+    .compass-tick.east { transform: rotate(90deg); }
+    .compass-tick.south { transform: rotate(180deg); }
+    .compass-tick.west { transform: rotate(270deg); }
+
+    /* Compass needle — north (teal) */
+    .needle-north {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 38px solid #0ea5a5;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Compass needle — south (gray) */
+    .needle-south {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 38px solid #c8c6c1;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Compass center dot */
+    .compass-center {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #ffffff;
+      border: 2px solid #e8e6e1;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+
+    /* Text */
+    .title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #8a8a8a;
+      line-height: 1.6;
+      max-width: 380px;
+      margin-bottom: 36px;
+    }
+
+    /* CTA button */
+    .cta {
+      display: inline-block;
+      background: #0ea5a5;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 12px 28px;
+      border-radius: 12px;
+      transition: background 0.2s ease;
+      margin-bottom: 16px;
+    }
+
+    .cta:hover {
+      background: #0c8f8f;
+    }
+
+    /* Secondary link */
+    .secondary-link {
+      font-size: 13px;
+      color: #8a8a8a;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .secondary-link:hover {
+      color: #1a1a1a;
+    }
+  </style>
+</head>
+<body>
+
+  <a class="header" href="/workflow-guide/">Synapse</a>
+
+  <div class="content">
+    <div class="four-oh-four">404</div>
+
+    <div class="compass-wrapper">
+      <div class="compass-ring"></div>
+      <div class="compass-tick north"></div>
+      <div class="compass-tick east"></div>
+      <div class="compass-tick south"></div>
+      <div class="compass-tick west"></div>
+      <div class="needle-north"></div>
+      <div class="needle-south"></div>
+      <div class="compass-center"></div>
+    </div>
+
+    <div class="title">길을 잃었습니다</div>
+    <div class="subtitle">요청하신 페이지를 찾을 수 없습니다. URL이 변경되었거나 삭제되었을 수 있습니다.</div>
+
+    <a href="/workflow-guide/" class="cta">홈으로 돌아가기</a>
+    <a href="javascript:history.back()" class="secondary-link">이전 페이지로</a>
+  </div>
+
+</body>
 </html>
